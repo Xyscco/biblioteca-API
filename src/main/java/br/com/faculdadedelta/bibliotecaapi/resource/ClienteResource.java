@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ public class ClienteResource {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
+	@PreAuthorize("hasAuthority('ROLE_INCLUIR_CLIENTE')")
 	public Cliente inserir(@RequestBody @Valid Cliente cliente, HttpServletResponse response) {
 		Cliente clienteCadastrado = service.inserir(cliente);
 
@@ -44,24 +46,28 @@ public class ClienteResource {
 
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
+	@PreAuthorize("hasAuthority('ROLE_LISTAR_CLIENTE')")
 	public Cliente alterar(@RequestBody @Valid Cliente cliente, @PathVariable("id") Long id) {
 		return service.alterar(cliente, id);
 	}
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasAuthority('ROLE_EXCLUIR_CLIENTE')")
 	public void exlcuir(@PathVariable("id") Long id) {
 		service.excluir(id);
 	}
 
 	@GetMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_POR_ID_CLIENTE')")
 	public Cliente pesquisarPorId(@PathVariable("id") Long id) {
 		return service.pesquisarPorId(id);
 	}
 
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
+	@PreAuthorize("hasAuthority('ROLE_LISTAR_CLIENTE')")
 	public List<Cliente> listar() {
 		return service.listar();
 	}
